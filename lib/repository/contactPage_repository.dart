@@ -8,10 +8,11 @@ class ContactRepository {
     return await helper.getAllContacts();
   }
 
-  Future<int> getContactRepo(int id) async {
+  Future<Contact> getContactRepo(int id) async {
     var helper = DatabaseHelper();
-
-    // return await helper.getContact(id);
+    print("hi id is ");
+    print(id);
+    return await helper.getContact(id);
   }
 
   Future<bool> saveContactRepo(Contact contact) async {
@@ -20,7 +21,8 @@ class ContactRepository {
   }
 
   Future<int> deleteContactRepo(int id) async {
-    print('deleteContactRepo');
+    print('deleteContactRepo id ');
+    print(id);
     var helper = DatabaseHelper();
     return await helper.deleteContact(id);
   }

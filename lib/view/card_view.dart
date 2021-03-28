@@ -61,7 +61,7 @@ class CardView extends StatelessWidget {
         Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new ContactDetails(contact: contact)));
+                builder: (context) => new ContactDetails(contact)));
       },
       onLongPress: () {
         Navigator.push(

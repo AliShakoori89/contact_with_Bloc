@@ -60,15 +60,26 @@ class FetchContactEvent extends ContactEvents{
   List<Object> get props => [contact];
 }
 
-class ContactIsLoadedState extends ContactState {
+class ContactsIsLoadedState extends ContactState {
   final _contacts;
 
-  ContactIsLoadedState(this._contacts);
+  ContactsIsLoadedState(this._contacts);
 
   List<Contact> get getContacts => _contacts;
 
   @override
   List<Object> get props => [_contacts];
+}
+
+class ContactIsLoadedState extends ContactState {
+  final _contact;
+
+  ContactIsLoadedState(this._contact);
+
+  Contact get getContact => _contact;
+
+  @override
+  List<Object> get props => [_contact];
 }
 
 class ContactIsNotLoadedState extends ContactState {}
@@ -84,29 +95,28 @@ class ContactBloc extends Bloc<ContactEvents, ContactState> {
       print("bloc save is called");
      await contactRepo.saveContactRepo(event.contact);
      List<Contact> contacts  = await contactRepo.getAllContactsRepo();
-     yield ContactIsLoadedState(contacts);
+     yield ContactsIsLoadedState(contacts);
       print("bloc save is finished");
     }
     if (event is FetchContactsEvent) {
       List<Contact> contacts = await contactRepo.getAllContactsRepo();
-      yield ContactIsLoadedState(contacts);
+      yield ContactsIsLoadedState(contacts);
     }
     if (event is EditContactEvent) {
       await contactRepo.updateContactRepo(event.contact);
       List<Contact> contacts = await contactRepo.getAllContactsRepo();
-      yield ContactIsLoadedState(contacts);
+      yield ContactsIsLoadedState(contacts);
     }
     if (event is DeleteContactEvent) {
       print("DeleteContactEvent in contactpage bloc");
       await contactRepo.deleteContactRepo(event.contact.id);
       List<Contact> contacts = await contactRepo.getAllContactsRepo();
-      yield ContactIsLoadedState(contacts);
+      yield ContactsIsLoadedState(contacts);
     }
     if (event is FetchContactEvent) {
-      print("DeleteContactEvent in contactpage bloc");
-      await contactRepo.getContactRepo(event.contact.id);
-      List<Contact> contacts = await contactRepo.getAllContactsRepo();
-      yield ContactIsLoadedState(contacts);
+      print("Fetch in contactpage bloc");
+      Contact contact = await contactRepo.getContactRepo(event.contact.id);
+      yield ContactIsLoadedState(contact);
     }
   }
 }

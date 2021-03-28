@@ -12,10 +12,11 @@ class EditedtPage extends StatefulWidget {
   EditedtPage({this.contact});
 
   @override
-  _EditedtPageState createState() => _EditedtPageState();
+  _EditedtPageState createState() => _EditedtPageState(this.contact);
 }
 
 class _EditedtPageState extends State<EditedtPage> {
+  final Contact contact;
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailsController = TextEditingController();
@@ -25,6 +26,8 @@ class _EditedtPageState extends State<EditedtPage> {
   bool _userEdited = false;
   Contact _editedContact;
   bool isvalid = false;
+
+  _EditedtPageState(this.contact);
 
   @override
   void initState() {
@@ -78,9 +81,8 @@ class _EditedtPageState extends State<EditedtPage> {
                       child: GestureDetector(
                           child: Icon(Icons.delete),
                       onTap: (){
-                        Contact contact = Contact();
                         final contactBloc = BlocProvider.of<ContactBloc>(context);
-                        contactBloc.add(DeleteContactEvent(contact));
+                        contactBloc.add(DeleteContactEvent(this.contact));
                         Navigator.pop(context);
                       },
                       )
