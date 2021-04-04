@@ -1,42 +1,65 @@
 import 'dart:io';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
+import 'package:phonebook_with_bloc/map_screen.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:flutter/services.dart';
 
 
-class AddPage extends StatefulWidget {
+class AddEditPage extends StatefulWidget {
+
+  final Contact contact;
+  AddEditPage({this.contact});
+
   @override
-  _AddPageState createState() => _AddPageState();
+  AddEditPageState createState() => AddEditPageState();
 }
 
-class _AddPageState extends State<AddPage> {
+class AddEditPageState extends State<AddEditPage> {
   final _nameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailsController = TextEditingController();
   final _phoneController = TextEditingController();
   final _nameFormKey = GlobalKey<FormState>();
   final _lastNameFormKey = GlobalKey<FormState>();
-  File _image;
-  final imagePicker = ImagePicker();
   Contact _editedContact;
+  bool userEdited = false;
+  File imageFile;
+  final imagePicker = ImagePicker();
+  Contact contact;
 
   bool isValid = false;
 
-  Future _getFromCamera() async {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.contact == null) {
+      _editedContact = Contact();
+    } else {
+      _editedContact = Contact.fromMap(widget.contact.toMap());
+    }
+
+    _nameController.text  = _editedContact.name;
+    _lastNameController.text = _editedContact.lastName;
+    _emailsController.text = _editedContact.email;
+    _phoneController.text = _editedContact.phone;
+  }
+
+  Future getFromCamera() async {
     final image = await imagePicker.getImage(source: ImageSource.camera);
     setState(() {
-      _image = File(image.path);
+      imageFile = File(image.path);
     });
   }
 
-  Future _getFromGallery() async {
+  Future getFromGallery() async {
     final image = await imagePicker.getImage(source: ImageSource.gallery);
     setState(() {
-      _image = File(image.path);
+      imageFile = File(image.path);
     });
   }
 
@@ -73,12 +96,12 @@ class _AddPageState extends State<AddPage> {
             top: 150.0, // (background container size) - (circle height / 2)
             child: GestureDetector(
               onTap: () {
-                _showPicker(context);
+                showPicker(context);
               },
               child: CircleAvatar(
                   radius: 55,
                   backgroundColor: Colors.white,
-                  child: _image == null
+                  child: imageFile == null
                       ? Container(
                           width: 100,
                           height: 100,
@@ -94,7 +117,7 @@ class _AddPageState extends State<AddPage> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
                         image: DecorationImage(
-                            image: FileImage(_image),
+                            image: FileImage(imageFile),
                             fit: BoxFit.fill)),
                   )
                   // Image.file(_image),
@@ -107,7 +130,7 @@ class _AddPageState extends State<AddPage> {
   }
 
 
-  _showPicker(context) {
+  showPicker(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -119,14 +142,14 @@ class _AddPageState extends State<AddPage> {
                       leading: new Icon(Icons.photo_library),
                       title: new Text('Photo Library'),
                       onTap: () {
-                        _getFromGallery();
+                        getFromGallery();
                         Navigator.of(context).pop();
                       }),
                   new ListTile(
                     leading: new Icon(Icons.photo_camera),
                     title: new Text('Camera'),
                     onTap: () {
-                      _getFromCamera();
+                      getFromCamera();
                       Navigator.of(context).pop();
                     },
                   ),
@@ -140,52 +163,91 @@ class _AddPageState extends State<AddPage> {
 
   SafeArea buildSafeArea(BuildContext context) {
     return SafeArea(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height / 14),
-                    TextFieldClass(
-                      formKey: _nameFormKey,
-                      controller: _nameController,
-                      hintText: 'Name',
-                      alarmText: 'Name',
-                      icon: Icons.person,
-                    ),
-
-                    ///name
-                    TextFieldClass(
-                      formKey: _lastNameFormKey,
-                      controller: _lastNameController,
-                      hintText: 'LastName',
-                      alarmText: 'LastName',
-                      icon: Icons.person,
-                    ),
-
-                    ///lastname
-                    TextFieldClass(
-                      controller: _emailsController,
-                      hintText: 'Email',
-                      alarmText: 'Email',
-                      icon: Icons.email,
-                    ),
-
-                    ///email
-                    TextFieldClass(
-                      keyboardType: TextInputType.number,
-                      maxLength: 11,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-                      ],
-                      controller: _phoneController,
-                      hintText: 'PhoneNumber',
-                      alarmText: 'PhoneNumber',
-                      icon: Icons.phone,
+      child: Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: MediaQuery.of(context).size.height / 14),
+            TextFieldClass(
+              type: 'name',
+              formKey: _nameFormKey,
+              controller: _nameController,
+              hintText: 'Name',
+              alarmText: 'Name',
+              icon: Icons.person,
+              userEdited: true,
             ),
 
-            SizedBox(
-              height: MediaQuery.of(context).size.height / 6,
+            ///name
+            TextFieldClass(
+              type: 'lastName',
+              formKey: _lastNameFormKey,
+              controller: _lastNameController,
+              hintText: 'LastName',
+              alarmText: 'LastName',
+              icon: Icons.person,
+              userEdited: true,
+            ),
+
+            ///lastname
+            TextFieldClass(
+              type: 'email',
+              controller: _emailsController,
+              hintText: 'Email',
+              alarmText: 'Email',
+              icon: Icons.email,
+              userEdited: true,
+            ),
+
+            ///email
+            TextFieldClass(
+              keyboardType: TextInputType.number,
+              maxLength: 11,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+              ],
+              type: 'phone',
+              controller: _phoneController,
+              hintText: 'PhoneNumber',
+              alarmText: 'PhoneNumber',
+              icon: Icons.phone,
+              userEdited: true,
+            ),
+
+            Padding (
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height/20 ,
+                  bottom: MediaQuery.of(context).size.height/100),
+              child: GestureDetector(
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/100),
+                      child: Icon(Icons.add_location_alt),
+                    ),
+                    Text('   Add Route ->      '),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(),
+                          image: DecorationImage(
+                              image: AssetImage('assets/images/mapRoute.jpg'),
+                              fit: BoxFit.fill
+                          )
+                      ),
+                      width: MediaQuery.of(context).size.height/7,
+                      height: MediaQuery.of(context).size.height/25,
+                      // child: Icon(
+                      //   Icons.add_location_alt ,
+                      //   color: Colors.grey[850]),
+                    ),
+                  ],
+                ),
+                onTap: () async {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MapScreen()));
+                },
+              ),
             ),
 
             ///phone
@@ -214,18 +276,18 @@ class _AddPageState extends State<AddPage> {
                               _lastNameFormKey.currentState.validate()) {
                             Contact contact = Contact();
                             contact.name = this._nameController.text;
-                            contact.lastname = this._lastNameController.text;
+                            contact.lastName = this._lastNameController.text;
                             contact.phone = this._phoneController.text;
                             contact.email = this._emailsController.text;
-                            contact.imgPath = _image.path;
+                            contact.imgPath = imageFile.path;
+                            _editedContact.latitude = contact.latitude;
+                            _editedContact.longitude = contact.longitude;
                             final contactBloc =
                                 BlocProvider.of<ContactBloc>(context);
                             contactBloc.add(AddContactEvent(contact));
                             Navigator.pop(context);
                           }
-                        }
-                    )
-                ),
+                        })),
               ),
             )
           ],
@@ -240,10 +302,12 @@ class TextFieldClass extends StatefulWidget {
   final hintText;
   final alarmText;
   final icon;
+  final type;
   final formKey;
   final maxLength;
   final keyboardType;
   final inputFormatters;
+  final userEdited;
 
   const TextFieldClass(
       {this.controller,
@@ -253,7 +317,9 @@ class TextFieldClass extends StatefulWidget {
       this.formKey,
       this.maxLength,
       this.keyboardType,
-      this.inputFormatters});
+      this.inputFormatters,
+      this.userEdited,
+        this.type});
 
   @override
   _TextFieldClassState createState() => _TextFieldClassState(
@@ -264,7 +330,9 @@ class TextFieldClass extends StatefulWidget {
       formKey,
       maxLength,
       keyboardType,
-      inputFormatters);
+      inputFormatters,
+      userEdited,
+      type);
 }
 
 class _TextFieldClassState extends State<TextFieldClass> {
@@ -276,6 +344,11 @@ class _TextFieldClassState extends State<TextFieldClass> {
   final maxLength;
   final keyboardType;
   final inputFormatters;
+  final userEdited;
+  final type;
+  bool _userEdited = false;
+  Contact _editedContact;
+
 
   _TextFieldClassState(
       this.controller,
@@ -285,7 +358,9 @@ class _TextFieldClassState extends State<TextFieldClass> {
       this.formKey,
       this.maxLength,
       this.keyboardType,
-      this.inputFormatters);
+      this.inputFormatters,
+      this.userEdited,
+      this.type);
 
   @override
   Widget build(BuildContext context) {

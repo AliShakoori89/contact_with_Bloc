@@ -97,14 +97,11 @@ class DatabaseHelper {
     return await dbContact.delete("my_table", where: '$columnId = ?', whereArgs: [id]);
   }
 
-  updateContact(Contact person) async {
-    var myContact = await database;
-    await myContact.update (
-        Contact.TABLENAME,
-        person.toMap (
-        ),
-        where: "id=?",whereArgs: [person.id],
-        conflictAlgorithm: ConflictAlgorithm.replace);
+  Future<int> updateContact(Contact contact) async {
+    print('database ${contact.id}');
+    var dbContact = await database;
+    return await dbContact.update("my_table", contact.toMap(),
+        where: '$columnId = ?', whereArgs: [contact.id]);
   }
 }
 

@@ -3,7 +3,7 @@ import 'package:phonebook_with_bloc/database/database.dart';
 class Contact {
   int id;
   String name;
-  String lastname;
+  String lastName;
   String email;
   String phone;
   String imgPath;
@@ -13,7 +13,7 @@ class Contact {
   Contact(
       {this.id,
       this.name,
-      this.lastname,
+      this.lastName,
       this.email,
       this.phone,
       this.imgPath,
@@ -25,7 +25,7 @@ class Contact {
   Contact.Map(dynamic Contact) {
     this.id = Contact['id'];
     this.name = Contact['name'];
-    this.lastname = Contact['lastname'];
+    this.lastName = Contact['lastname'];
     this.email = Contact['email'];
     this.phone = Contact['phone'];
     this.imgPath = Contact['img'];
@@ -36,7 +36,7 @@ class Contact {
   Contact.fromMap(Map map) {
     id = map[columnId];
     name = map[columnName];
-    lastname = map[columnLastname];
+    lastName = map[columnLastname];
     email = map[columnEmail];
     phone = map[columnPhone];
     imgPath = map[columnImg];
@@ -47,7 +47,7 @@ class Contact {
   Contact.MaptoObject(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
-    lastname = map['lastname'];
+    lastName = map['lastname'];
     email = map['email'];
     phone = map['phone'];
     imgPath = map['img'];
@@ -59,7 +59,7 @@ class Contact {
     return {
       'id': id,
       'name': name,
-      'lastname': lastname,
+      'lastname': lastName,
       'email': email,
       'phone': phone,
       'img': imgPath,

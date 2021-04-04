@@ -56,4 +56,13 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    classpath 'com.google.gms:google-services:3.0.0'
+}
+
+plugins {
+    id("com.android.application")
+    id("kotlin-android")
+
+    // 1. Include the plugin
+    id("com.google.secrets_gradle_plugin") version "0.5"
 }

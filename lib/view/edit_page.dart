@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
+import 'package:phonebook_with_bloc/view/add_page.dart';
 
 class EditedtPage extends StatefulWidget {
   final Contact contact;
@@ -26,27 +27,73 @@ class _EditedtPageState extends State<EditedtPage> {
   bool _userEdited = false;
   Contact _editedContact;
   bool isvalid = false;
+  File imageFile;
+  final imagePicker = ImagePicker();
 
   _EditedtPageState(this.contact);
 
   @override
   void initState() {
     super.initState();
-    if (widget.contact == null) {
-      _editedContact = Contact();
-    } else {
-      _editedContact = Contact.fromMap(widget.contact.toMap());
-    }
+
+    _editedContact = Contact.fromMap(widget.contact.toMap());
 
     _nameController.text  = _editedContact.name;
-    _lastNameController.text = _editedContact.lastname;
+    _lastNameController.text = _editedContact.lastName;
     _emailsController.text = _editedContact.email;
     _phoneController.text = _editedContact.phone;
   }
 
+  Future getFromCamera() async {
+    final image = await imagePicker.getImage(source: ImageSource.camera);
+    setState(() {
+      contact.imgPath = image.path;
+    });
+  }
+
+  Future getFromGallery() async {
+    final image = await imagePicker.getImage(source: ImageSource.gallery);
+    setState(() {
+      contact.imgPath = image.path;
+    });
+  }
+
+  showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        getFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      getFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -55,23 +102,20 @@ class _EditedtPageState extends State<EditedtPage> {
             children: <Widget>[
               Stack(
                 children: [
-                  Container(
-                    height: 200.0,
-                    width: 400.0,
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(20.0),
-                      image: DecorationImage(
-                        image:
-                        // _editedContact.img != null
-                        // ?
-                        // FileImage(_editedContact.img)
-                        //     :
-                        AssetImage('assets/images/header.png'),
-                        fit: BoxFit.cover,
+                  Positioned(// (background container size) - (circle height / 2)
+                    child: Container(
+                        height: 200.0,
+                        width: 400.0,
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(20.0),
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/header.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        // child: Image.asset('assets/images/header.png', fit: BoxFit.fill,),
                       ),
-                    ),
-                    // child: Image.asset('assets/images/header.png', fit: BoxFit.fill,),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
@@ -95,18 +139,40 @@ class _EditedtPageState extends State<EditedtPage> {
           // Profile image
           Positioned(
             top: 150.0, // (background container size) - (circle height / 2)
-            child: Container(
-              height: 100.0,
-              width: 100.0,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/User.png',),
-                      fit: BoxFit.fill
+            child: GestureDetector(
+                  onTap: () {
+                    showPicker(context);
+                  },
+                  child: CircleAvatar(
+                      radius: 55,
+                      backgroundColor: Colors.white,
+                      child: contact.imgPath == null
+                          ? Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/User.png'),
+                                fit: BoxFit.fill)),
+                      )
+                          : Container(
+                        width: 100,
+                        height: 100,
+                        child: CircleAvatar(
+                          radius: 20.0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: Container(
+                              width: MediaQuery.of(context).size.height / 2,
+                              height: MediaQuery.of(context).size.height / 2,
+                              child: Image.file(File(contact.imgPath),fit: BoxFit.fill,),
+                            ),
+                          ),
+                        )
+                      )
+                    // Image.file(_image),
                   ),
-                  border: Border.all(color: Colors.white,width: 4.0),
-                  shape: BoxShape.circle,
-                  color: Colors.green
-              ),
             ),
           ),
         ],
@@ -164,11 +230,12 @@ class _EditedtPageState extends State<EditedtPage> {
                           onPressed: () {
                             Contact contact = Contact();
                             contact.name = this._nameController.text;
-                            contact.lastname = this._lastNameController.text;
+                            contact.lastName = this._lastNameController.text;
                             contact.phone = this._phoneController.text;
                             contact.email = this._emailsController.text;
+                            contact.imgPath = contact.imgPath ;
                             final contactBloc = BlocProvider.of<ContactBloc>(context);
-                            contactBloc.add(AddContactEvent(contact));
+                            contactBloc.add(EditContactEvent(_editedContact));
                             Navigator.pop(context);
                           }
                       ),
@@ -177,31 +244,6 @@ class _EditedtPageState extends State<EditedtPage> {
                 ),
               ),
             );
-  }
-
-  _openGallary(BuildContext context) async{
-    // ignore: deprecated_member_use
-    await ImagePicker()
-        .getImage(source: ImageSource.gallery)
-        .then((file) {
-      if (file == null) return;
-      setState(() {
-        _editedContact.imgPath = file.path;
-      });
-    });
-    Navigator.of(context).pop();
-  }
-
-  _openCamera(BuildContext context) async{
-    // ignore: deprecated_member_use
-    await ImagePicker().getImage(source: ImageSource.camera)
-        .then((file){
-      if (file == null) return;
-      setState(() {
-        _editedContact.imgPath = file.path;
-      });
-    });
-    Navigator.of(context).pop();
   }
 
   Future<void> _showChoiceDialog(BuildContext context){
@@ -214,14 +256,14 @@ class _EditedtPageState extends State<EditedtPage> {
                 GestureDetector(
                     child: Text('Gallery'),
                     onTap: (){
-                      _openGallary(context);
+                      AddEditPageState().getFromCamera();
                     }
                 ),
                 Padding(padding: EdgeInsets.all(8.0)),
                 GestureDetector(
                     child: Text('Camera'),
                     onTap: (){
-                      _openCamera(context);
+                      AddEditPageState().getFromCamera();
                     }
                 )
               ],
@@ -253,39 +295,6 @@ class _EditedtPageState extends State<EditedtPage> {
           _showChoiceDialog(context);
         }
     );
-
-  }
-
-  Future<bool> _requestPop() {
-    if (_userEdited) {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Descartar alterações?'),
-              content: Text('Se você sair, as alterações serão perdidas.'),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text('Cancelar'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                FlatButton(
-                  child: Text('Sim'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            );
-          }
-      );
-      return Future.value(false);
-    } else {
-      return Future.value(true);
-    }
   }
 }
 
@@ -294,6 +303,7 @@ class TextFieldClass extends StatefulWidget {
   final controller;
   final hintText;
   final alarmText;
+  final image;
   final icon;
   final formKey;
   final maxLength;
@@ -301,13 +311,13 @@ class TextFieldClass extends StatefulWidget {
   final inputFormatters;
 
   const TextFieldClass({this.controller, this.hintText,
-    this.alarmText, this.icon,
+    this.alarmText, this.image, this.icon,
     this.formKey, this.maxLength,
     this.keyboardType, this.inputFormatters});
 
   @override
   _TextFieldClassState createState() =>
-      _TextFieldClassState(controller, hintText, alarmText,
+      _TextFieldClassState(controller, hintText, alarmText, image,
           icon, formKey, maxLength, keyboardType, inputFormatters);
 }
 
@@ -316,6 +326,7 @@ class _TextFieldClassState extends State<TextFieldClass> {
   final controller;
   final hintText;
   final alarmText;
+  final image;
   final icon;
   final formKey;
   final maxLength;
@@ -326,7 +337,7 @@ class _TextFieldClassState extends State<TextFieldClass> {
   Contact _editedContact;
 
   _TextFieldClassState(this.controller, this.hintText,
-      this.alarmText, this.icon,
+      this.alarmText, this.image, this.icon,
       this.formKey, this.maxLength,
       this.keyboardType, this.inputFormatters);
 

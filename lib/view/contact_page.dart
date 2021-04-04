@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
-import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:phonebook_with_bloc/view/add_page.dart';
 import 'package:phonebook_with_bloc/view/card_view.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:phonebook_with_bloc/view/contact_details.dart';
-import 'package:phonebook_with_bloc/view/testPage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage();
@@ -17,11 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  // static const List<Widget> _widgetOptions = <Widget>[
-  //   Text('Home Page', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-  //   Text('Search Page', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-  //   Text('Profile Page', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-  // ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -85,7 +76,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.push(
                             context,
                             new MaterialPageRoute(
-                                builder: (context) => new AddPage()));
+                                builder: (context) => new AddEditPage()));
                       })
                 ],
               )
@@ -94,8 +85,9 @@ class _HomePageState extends State<HomePage> {
           body: contactsListViewBuilder(context, state.getContacts)
         );
       }
-      return Center(
-        child: Text("oops nothing here"),
+      return Container(
+        color: Colors.white,
+        child: Text("oops nothing here", style: TextStyle(color: Colors.white12,fontSize: 14.0),),
       );
     });
   }

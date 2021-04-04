@@ -38,6 +38,7 @@ class ContactDetailsContactEvent extends ContactEvents {
 class EditContactEvent extends ContactEvents{
   final Contact contact;
 
+
   EditContactEvent(this.contact);
 
   @override
@@ -103,6 +104,7 @@ class ContactBloc extends Bloc<ContactEvents, ContactState> {
       yield ContactsIsLoadedState(contacts);
     }
     if (event is EditContactEvent) {
+      print('bloc ${event.contact}');
       await contactRepo.updateContactRepo(event.contact);
       List<Contact> contacts = await contactRepo.getAllContactsRepo();
       yield ContactsIsLoadedState(contacts);

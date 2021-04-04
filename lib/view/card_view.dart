@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:phonebook_with_bloc/view/contact_details.dart';
@@ -19,14 +22,22 @@ class CardView extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.bottomLeft,
-                  child: CircleAvatar(
+                  child: contact.imgPath == null ? CircleAvatar(
                     radius: 20.0,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Container(),
                     ),
-                  ),
+                  ) : CircleAvatar(
+                    radius: 20.0,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: Container(
+                        width: MediaQuery.of(context).size.height / 2,
+                        child: Image.file(File(contact.imgPath),fit: BoxFit.fill,),
+                      ),
                 ),
+                  ),),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -44,7 +55,7 @@ class CardView extends StatelessWidget {
                           width: MediaQuery.of(context).size.height / 80,
                         ),
                         Text(
-                          contact.lastname,
+                          contact.lastName,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
