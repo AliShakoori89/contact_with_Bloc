@@ -33,6 +33,7 @@ class CardView extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Container(
+                        height: MediaQuery.of(context).size.height / 2,
                         width: MediaQuery.of(context).size.height / 2,
                         child: Image.file(File(contact.imgPath),fit: BoxFit.fill,),
                       ),

@@ -39,6 +39,7 @@ final Contact contact;
         return Future.value(true);
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           color: Colors.grey[350],
           child: Stack (
@@ -55,19 +56,19 @@ final Contact contact;
                           child: Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
-                              border: Border.all(color: Colors.white60,),
-                              borderRadius: BorderRadius.circular(20.0)
+                                border: Border.all(color: Colors.white60,),
+                                borderRadius: BorderRadius.circular(20.0)
                             ),
                             width: MediaQuery.of(context).size.height/2.05,
                             height: MediaQuery.of(context).size.height/1.4,
                             child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height/5,
-                                      left: MediaQuery.of(context).size.height/50,
-                                    ),
-                                    child: Center(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height/5,
+                                    left: MediaQuery.of(context).size.height/50,
+                                  ),
+                                  child: Center(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
@@ -88,88 +89,88 @@ final Contact contact;
                                           Padding(
                                             padding: EdgeInsets.only(right: MediaQuery.of(context).size.height/40,),
                                             child: GestureDetector(
-                                                child: Icon(Icons.phone, color: Colors.green,),
-                                            onTap: () {UrlLauncher.launch("tel:${contact.phone}");},),
+                                              child: Icon(Icons.phone, color: Colors.green,),
+                                              onTap: () {UrlLauncher.launch("tel:${contact.phone}");},),
                                           ),
                                         ],
                                       )
-                                    ),
                                   ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height/20,
-                                      left: MediaQuery.of(context).size.height/50,),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.email, color: Colors.grey,),
-                                              SizedBox(width: MediaQuery.of(context).size.height/50),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('Email',style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-                                                  SizedBox(height: MediaQuery.of(context).size.height/200),
-                                                  Text('$email', style: TextStyle(fontSize: 15, color: Colors.black),)
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(right: MediaQuery.of(context).size.height/40,),
-                                            child: GestureDetector(
-                                              child: Image.asset("assets/icons/gmail.png",
-                                              width: 25,),
-                                              onTap: () {_launchURL('$email','','');},),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height/20,
-                                      left: MediaQuery.of(context).size.height/50,),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(Icons.location_on, color: Colors.grey,),
-                                              SizedBox(width: MediaQuery.of(context).size.height/50),
-                                              Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('Location',style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-                                                  SizedBox(height: MediaQuery.of(context).size.height/200),
-                                                  Text('----------->', style: TextStyle(fontSize: 15, color: Colors.black),)
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(right: MediaQuery.of(context).size.height/40,),
-                                            child: GestureDetector(
-                                              child: Icon(Icons.location_on, color: Colors.blue,),
-                                                onTap: () async{
-                                                  final availableMaps = await MapLauncher.installedMaps;
-                                                  print('111111111111111111111111111111111111${availableMaps}');
-                                                  await availableMaps.first.showMarker(
-                                                    // coords: Coords(contacts[index].latitude, contacts[index].longitude),
-                                                    title: "Ocean Beach",
-                                                  );
-                                                }
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height/20,
+                                    left: MediaQuery.of(context).size.height/50,),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Icons.email, color: Colors.grey,),
+                                            SizedBox(width: MediaQuery.of(context).size.height/50),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Email',style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+                                                SizedBox(height: MediaQuery.of(context).size.height/200),
+                                                Text('$email', style: TextStyle(fontSize: 15, color: Colors.black),)
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.height/40,),
+                                          child: GestureDetector(
+                                            child: Image.asset("assets/icons/gmail.png",
+                                              width: 25,),
+                                            onTap: () {_launchURL('$email','','');},),
+                                        ),
+                                      ],
                                     ),
-                                  )
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height/20,
+                                    left: MediaQuery.of(context).size.height/50,),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Icons.location_on, color: Colors.grey,),
+                                            SizedBox(width: MediaQuery.of(context).size.height/50),
+                                            Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text('Location',style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+                                                SizedBox(height: MediaQuery.of(context).size.height/200),
+                                                Text('----------->', style: TextStyle(fontSize: 15, color: Colors.black),)
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.height/40,),
+                                          child: GestureDetector(
+                                              child: Icon(Icons.location_on, color: Colors.blue,),
+                                              onTap: () async{
+                                                final availableMaps = await MapLauncher.installedMaps;
+                                                print('111111111111111111111111111111111111${availableMaps}');
+                                                await availableMaps.first.showMarker(
+                                                  // coords: Coords(contacts[index].latitude, contacts[index].longitude),
+                                                  title: "Ocean Beach",
+                                                );
+                                              }
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
 
-                                ],
+                              ],
                             ),
                           ),
                         ),

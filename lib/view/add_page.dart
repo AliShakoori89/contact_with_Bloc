@@ -245,7 +245,7 @@ class AddEditPageState extends State<AddEditPage> {
                 onTap: () async {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => MapScreen()));
+                      MaterialPageRoute(builder: (context) => MapScreen(contact)));
                 },
               ),
             ),
@@ -280,8 +280,7 @@ class AddEditPageState extends State<AddEditPage> {
                             contact.phone = this._phoneController.text;
                             contact.email = this._emailsController.text;
                             contact.imgPath = imageFile.path;
-                            _editedContact.latitude = contact.latitude;
-                            _editedContact.longitude = contact.longitude;
+                            // contact.longitude = longitude;
                             final contactBloc =
                                 BlocProvider.of<ContactBloc>(context);
                             contactBloc.add(AddContactEvent(contact));
