@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,10 +7,9 @@ import 'package:phonebook_with_bloc/map_screen.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:flutter/services.dart';
 
-
 class AddEditPage extends StatefulWidget {
-
   final Contact contact;
+
   AddEditPage({this.contact});
 
   @override
@@ -43,7 +40,7 @@ class AddEditPageState extends State<AddEditPage> {
       _editedContact = Contact.fromMap(widget.contact.toMap());
     }
 
-    _nameController.text  = _editedContact.name;
+    _nameController.text = _editedContact.name;
     _lastNameController.text = _editedContact.lastName;
     _emailsController.text = _editedContact.email;
     _phoneController.text = _editedContact.phone;
@@ -65,35 +62,34 @@ class AddEditPageState extends State<AddEditPage> {
 
   @override
   Widget build(BuildContext context) {
-    // body: BlocProvider(
-    //   create: (BuildContext context) => ContactBloc(ContactRepository()),
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
         children: <Widget>[
           // background image and bottom contents
-          Column(
-            children: <Widget>[
-              Container(
-                height: 200.0,
-                width: 400.0,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(20.0),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/header.png'),
-                    fit: BoxFit.cover,
+          SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: MediaQuery.of(context).size.height / 4.5,
+                  width: MediaQuery.of(context).size.height / 2,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(20.0),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/header.png'),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-                // child: Image.asset('assets/images/header.png', fit: BoxFit.fill,),
-              ),
-              buildSafeArea(context),
-            ],
+                buildSafeArea(context),
+              ],
+            ),
           ),
           // Profile image
           Positioned(
-            top: 150.0, // (background container size) - (circle height / 2)
+            top: MediaQuery.of(context).size.height / 6,
             child: GestureDetector(
               onTap: () {
                 showPicker(context);
@@ -103,8 +99,8 @@ class AddEditPageState extends State<AddEditPage> {
                   backgroundColor: Colors.white,
                   child: imageFile == null
                       ? Container(
-                          width: 100,
-                          height: 100,
+                          width: MediaQuery.of(context).size.height / 8,
+                          height: MediaQuery.of(context).size.height / 8,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               image: DecorationImage(
@@ -112,23 +108,20 @@ class AddEditPageState extends State<AddEditPage> {
                                   fit: BoxFit.fill)),
                         )
                       : Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                            image: FileImage(imageFile),
-                            fit: BoxFit.fill)),
-                  )
-                  // Image.file(_image),
-              ),
+                          width: MediaQuery.of(context).size.height / 9,
+                          height: MediaQuery.of(context).size.height / 9,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              image: DecorationImage(
+                                  image: FileImage(imageFile),
+                                  fit: BoxFit.fill)),
+                        )),
             ),
           )
         ],
       ),
     );
   }
-
 
   showPicker(context) {
     showModalBottomSheet(
@@ -157,8 +150,7 @@ class AddEditPageState extends State<AddEditPage> {
               ),
             ),
           );
-        }
-    );
+        });
   }
 
   SafeArea buildSafeArea(BuildContext context) {
@@ -168,61 +160,75 @@ class AddEditPageState extends State<AddEditPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: MediaQuery.of(context).size.height / 14),
-            TextFieldClass(
-              type: 'name',
-              formKey: _nameFormKey,
-              controller: _nameController,
-              hintText: 'Name',
-              alarmText: 'Name',
-              icon: Icons.person,
-              userEdited: true,
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              child: TextFieldClass(
+                type: 'name',
+                formKey: _nameFormKey,
+                controller: _nameController,
+                hintText: 'Name',
+                alarmText: 'Name',
+                icon: Icons.person,
+                userEdited: true,
+              ),
             ),
 
             ///name
-            TextFieldClass(
-              type: 'lastName',
-              formKey: _lastNameFormKey,
-              controller: _lastNameController,
-              hintText: 'LastName',
-              alarmText: 'LastName',
-              icon: Icons.person,
-              userEdited: true,
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              child: TextFieldClass(
+                type: 'lastName',
+                formKey: _lastNameFormKey,
+                controller: _lastNameController,
+                hintText: 'LastName',
+                alarmText: 'LastName',
+                icon: Icons.person,
+                userEdited: true,
+              ),
             ),
 
             ///lastname
-            TextFieldClass(
-              type: 'email',
-              controller: _emailsController,
-              hintText: 'Email',
-              alarmText: 'Email',
-              icon: Icons.email,
-              userEdited: true,
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              child: TextFieldClass(
+                type: 'email',
+                controller: _emailsController,
+                hintText: 'Email',
+                alarmText: 'Email',
+                icon: Icons.email,
+                userEdited: true,
+              ),
             ),
 
             ///email
-            TextFieldClass(
-              keyboardType: TextInputType.number,
-              maxLength: 11,
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-              ],
-              type: 'phone',
-              controller: _phoneController,
-              hintText: 'PhoneNumber',
-              alarmText: 'PhoneNumber',
-              icon: Icons.phone,
-              userEdited: true,
+            Padding(
+              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              child: TextFieldClass(
+                keyboardType: TextInputType.number,
+                maxLength: 11,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                ],
+                type: 'phone',
+                controller: _phoneController,
+                hintText: 'PhoneNumber',
+                alarmText: 'PhoneNumber',
+                icon: Icons.phone,
+                userEdited: true,
+              ),
             ),
 
-            Padding (
+            Padding(
               padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height/20 ,
-                  bottom: MediaQuery.of(context).size.height/100),
+                left: MediaQuery.of(context).size.height/60,
+                  top: MediaQuery.of(context).size.height / 20,
+                  bottom: MediaQuery.of(context).size.height / 100),
               child: GestureDetector(
                 child: Row(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height/100),
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height / 100),
                       child: Icon(Icons.add_location_alt),
                     ),
                     Text('   Add Route ->      '),
@@ -231,11 +237,9 @@ class AddEditPageState extends State<AddEditPage> {
                           border: Border.all(),
                           image: DecorationImage(
                               image: AssetImage('assets/images/mapRoute.jpg'),
-                              fit: BoxFit.fill
-                          )
-                      ),
-                      width: MediaQuery.of(context).size.height/7,
-                      height: MediaQuery.of(context).size.height/25,
+                              fit: BoxFit.fill)),
+                      width: MediaQuery.of(context).size.height / 7,
+                      height: MediaQuery.of(context).size.height / 25,
                       // child: Icon(
                       //   Icons.add_location_alt ,
                       //   color: Colors.grey[850]),
@@ -243,9 +247,8 @@ class AddEditPageState extends State<AddEditPage> {
                   ],
                 ),
                 onTap: () async {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MapScreen(contact)));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => MapScreen()));
                 },
               ),
             ),
@@ -254,11 +257,11 @@ class AddEditPageState extends State<AddEditPage> {
             Align(
               alignment: Alignment.bottomRight,
               child: Padding(
-                padding: EdgeInsets.all(
-                  MediaQuery.of(context).size.height / 100,
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 7,
                 ),
                 child: Container(
-                    width: 45,
+                    width: MediaQuery.of(context).size.height / 12,
                     child: FloatingActionButton(
                         child: Stack(
                           children: [
@@ -280,6 +283,8 @@ class AddEditPageState extends State<AddEditPage> {
                             contact.phone = this._phoneController.text;
                             contact.email = this._emailsController.text;
                             contact.imgPath = imageFile.path;
+                            contact.latitude = MapScreenState.latitude;
+                            contact.longitude = MapScreenState.longitude;
                             // contact.longitude = longitude;
                             final contactBloc =
                                 BlocProvider.of<ContactBloc>(context);
@@ -318,7 +323,7 @@ class TextFieldClass extends StatefulWidget {
       this.keyboardType,
       this.inputFormatters,
       this.userEdited,
-        this.type});
+      this.type});
 
   @override
   _TextFieldClassState createState() => _TextFieldClassState(
@@ -347,7 +352,6 @@ class _TextFieldClassState extends State<TextFieldClass> {
   final type;
   bool _userEdited = false;
   Contact _editedContact;
-
 
   _TextFieldClassState(
       this.controller,

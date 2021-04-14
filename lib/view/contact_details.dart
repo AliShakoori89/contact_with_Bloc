@@ -158,8 +158,10 @@ final Contact contact;
                                               onTap: () async{
                                                 final availableMaps = await MapLauncher.installedMaps;
                                                 print('111111111111111111111111111111111111${availableMaps}');
+                                                print('222222222222222222222222222222222222${contact.latitude}');
+                                                print('333333333333333333333333333333333333${contact.longitude}');
                                                 await availableMaps.first.showMarker(
-                                                  // coords: Coords(contacts[index].latitude, contacts[index].longitude),
+                                                  coords: Coords(contact.latitude, contact.longitude),
                                                   title: "Ocean Beach",
                                                 );
                                               }

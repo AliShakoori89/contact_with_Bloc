@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:phonebook_with_bloc/model/contact_model.dart';
 
 
 
 class MapScreen extends StatefulWidget {
 
-  final Contact contact;
-  MapScreen(this.contact);
-
   @override
-  MapScreenState createState() => MapScreenState(contact);
+  MapScreenState createState() => MapScreenState();
 }
 
 class MapScreenState extends State<MapScreen> {
 
-  List<Marker> myMarker = [];
-  final Contact contact;
+  static double latitude;
+  static double longitude;
 
-  MapScreenState(this.contact);
+  List<Marker> myMarker = [];
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +31,8 @@ class MapScreenState extends State<MapScreen> {
   _handleTap(LatLng tappedPoint) {
 
     setState(() {
-      contact.latitude = tappedPoint.latitude;
-      contact.longitude = tappedPoint.longitude;
+      latitude = tappedPoint.latitude;
+      longitude = tappedPoint.longitude;
       myMarker = [];
       myMarker.add(
         Marker(
