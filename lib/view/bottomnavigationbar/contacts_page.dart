@@ -1,24 +1,17 @@
+import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
+import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:phonebook_with_bloc/view/add_page.dart';
 import 'package:phonebook_with_bloc/view/card_view.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage();
-
+class ContactPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _ContactPageState createState() => _ContactPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+class _ContactPageState extends State<ContactPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -29,31 +22,6 @@ class _HomePageState extends State<HomePage> {
       if (state is ContactsIsLoadedState) {
         print("state is loading");
         return Scaffold(
-          bottomNavigationBar: BottomNavigationBar(
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.access_time_rounded),
-                    title: Text('Resent'),
-                    backgroundColor: Colors.white70
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.contacts),
-                    title: Text('Contact'),
-                    backgroundColor: Colors.white70
-                ),
-                BottomNavigationBarItem(
-                    icon: Icon(Icons.star),
-                    title: Text('Favorites'),
-                    backgroundColor: Colors.white70
-                ),
-              ],
-              type: BottomNavigationBarType.shifting,
-              currentIndex: _selectedIndex,
-              selectedItemColor: Colors.black,
-              iconSize: 25,
-              onTap: _onItemTapped,
-              elevation: 5
-          ),
           appBar: AppBar(
             backgroundColor: Colors.white,
             title: Center(
@@ -82,7 +50,7 @@ class _HomePageState extends State<HomePage> {
               )
             ],
           ),
-          body: contactsListViewBuilder(context, state.getContacts)
+          body: contactsListViewBuilder(context, state.getContacts),
         );
       }
       return Container(
@@ -111,3 +79,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+

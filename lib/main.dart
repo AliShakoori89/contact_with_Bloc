@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phonebook_with_bloc/repository/contactPage_repository.dart';
-import 'package:phonebook_with_bloc/view/contact_page.dart';
+import 'package:phonebook_with_bloc/view/home_page.dart';
 
 import 'bloc/contactPage_bloc.dart';
 

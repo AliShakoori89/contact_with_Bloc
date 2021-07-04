@@ -27,7 +27,6 @@ class AddEditPageState extends State<AddEditPage> {
   bool userEdited = false;
   File imageFile;
   final imagePicker = ImagePicker();
-  Contact contact;
 
   bool isValid = false;
 
@@ -161,7 +160,8 @@ class AddEditPageState extends State<AddEditPage> {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height / 14),
             Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.height / 60),
               child: TextFieldClass(
                 type: 'name',
                 formKey: _nameFormKey,
@@ -175,7 +175,8 @@ class AddEditPageState extends State<AddEditPage> {
 
             ///name
             Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.height / 60),
               child: TextFieldClass(
                 type: 'lastName',
                 formKey: _lastNameFormKey,
@@ -189,7 +190,8 @@ class AddEditPageState extends State<AddEditPage> {
 
             ///lastname
             Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.height / 60),
               child: TextFieldClass(
                 type: 'email',
                 controller: _emailsController,
@@ -202,7 +204,8 @@ class AddEditPageState extends State<AddEditPage> {
 
             ///email
             Padding(
-              padding: EdgeInsets.only(left: MediaQuery.of(context).size.height/60),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.height / 60),
               child: TextFieldClass(
                 keyboardType: TextInputType.number,
                 maxLength: 11,
@@ -220,7 +223,7 @@ class AddEditPageState extends State<AddEditPage> {
 
             Padding(
               padding: EdgeInsets.only(
-                left: MediaQuery.of(context).size.height/60,
+                  left: MediaQuery.of(context).size.height / 60,
                   top: MediaQuery.of(context).size.height / 20,
                   bottom: MediaQuery.of(context).size.height / 100),
               child: GestureDetector(
@@ -282,10 +285,14 @@ class AddEditPageState extends State<AddEditPage> {
                             contact.lastName = this._lastNameController.text;
                             contact.phone = this._phoneController.text;
                             contact.email = this._emailsController.text;
-                            contact.imgPath = imageFile.path;
+                            if (imageFile != null) {
+                              contact.imgPath = imageFile.path;
+                            } else {
+                              contact.imgPath = null;
+                            }
+                            contact.favorite = 0;
                             contact.latitude = MapScreenState.latitude;
                             contact.longitude = MapScreenState.longitude;
-                            // contact.longitude = longitude;
                             final contactBloc =
                                 BlocProvider.of<ContactBloc>(context);
                             contactBloc.add(AddContactEvent(contact));

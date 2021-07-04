@@ -32,6 +32,17 @@ class ContactRepository {
     return await helper.updateContact(contact);
   }
 
+  Future<List> fetchFavoriteContacts() async {
+    var helper = DatabaseHelper();
+    print('1111111111111111${helper.fetchFavorite()}');
+    return await helper.fetchFavorite();
+  }
+
+  Future<int> addFavoriteContactRepo(Contact contact) async {
+    var helper = DatabaseHelper();
+    return await helper.isFavorite(contact);
+  }
+
   Future closeRepo() async {
     var helper = DatabaseHelper();
     helper.close();

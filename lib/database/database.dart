@@ -7,12 +7,13 @@ final table = 'my_table';
 
 final columnId = 'id';
 final columnName = 'name';
-final columnLastname = 'lastname';
+final columnLastName = 'lastName';
 final columnEmail = 'email';
 final columnPhone = 'phone';
 final columnImg = 'img';
 final columnLatitude = 'latitude';
 final columnLongitude = 'longitude';
+final columnFavorite = 'favorite';
 
 
 class DatabaseHelper {
@@ -43,20 +44,20 @@ class DatabaseHelper {
           'CREATE TABLE $table ( '
               ' $columnId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,'
               ' $columnName TEXT NOT NULL ,'
-              ' $columnLastname TEXT NOT NULL ,'
+              ' $columnLastName TEXT NOT NULL ,'
               ' $columnPhone TEXT ,'
               ' $columnEmail TEXT ,'
               ' $columnImg TEXT ,'
               ' $columnLatitude REAL ,'
-              ' $columnLongitude REAL)');
+              ' $columnLongitude REAL ,'
+              ' $columnFavorite INTEGER )');
     });
   }
 
   Future<bool> saveContact(Contact contact) async {
     var myContact = await database;
     await myContact.insert (
-        Contact.TABLENAME,contact.toMap (
-    ),
+        Contact.TABLENAME,contact.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     print (
         'aaaaaaaaaaaaaaaaaaaaaaa${contact.toMap (
@@ -70,9 +71,7 @@ class DatabaseHelper {
         'SELECT * FROM my_table');
     var listContact = <Contact>[];
     for (Map m in listMap) {
-      listContact.add (
-          Contact.fromMap (
-              m));
+      listContact.add (Contact.fromMap (m));
     }
     return listContact;
   }
@@ -97,11 +96,29 @@ class DatabaseHelper {
     return await dbContact.delete("my_table", where: '$columnId = ?', whereArgs: [id]);
   }
 
+  Future<int> isFavorite(Contact contact) async {
+    var dbContact = await database;
+    return await dbContact.update("my_table", contact.toMap(),
+        where: '$columnId = ?', whereArgs: [contact.id]);
+  }
+
   Future<int> updateContact(Contact contact) async {
     print('database ${contact.id}');
     var dbContact = await database;
     return await dbContact.update("my_table", contact.toMap(),
         where: '$columnId = ?', whereArgs: [contact.id]);
+  }
+
+  Future<List> fetchFavorite() async {
+    var myContact = await database;
+    List listMap = await myContact.rawQuery (
+        'SELECT * FROM my_table WHERE favorite = ?', ['1']);
+    print('listMap====== $listMap');
+    var listContact = <Contact>[];
+    for (Map m in listMap) {
+      listContact.add (Contact.fromMap (m));
+    }
+    return listContact;
   }
 }
 

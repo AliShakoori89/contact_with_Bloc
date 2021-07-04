@@ -38,8 +38,16 @@ class ContactDetailsContactEvent extends ContactEvents {
 class EditContactEvent extends ContactEvents{
   final Contact contact;
 
-
   EditContactEvent(this.contact);
+
+  @override
+  List<Object> get props => [contact];
+}
+
+class FetchFavoriteContactEvent extends ContactEvents{
+  final Contact contact;
+
+  FetchFavoriteContactEvent(this.contact);
 
   @override
   List<Object> get props => [contact];
@@ -57,6 +65,14 @@ class FetchContactEvent extends ContactEvents{
   final Contact contact;
 
   FetchContactEvent(this.contact);
+  @override
+  List<Object> get props => [contact];
+}
+
+class AddContactToFavoriteEvent extends ContactEvents{
+  final Contact contact;
+
+  AddContactToFavoriteEvent(this.contact);
   @override
   List<Object> get props => [contact];
 }
@@ -103,10 +119,21 @@ class ContactBloc extends Bloc<ContactEvents, ContactState> {
       List<Contact> contacts = await contactRepo.getAllContactsRepo();
       yield ContactsIsLoadedState(contacts);
     }
+    if(event is AddContactToFavoriteEvent){
+      await contactRepo.addFavoriteContactRepo(event.contact);
+      Contact contact = await contactRepo.getContactRepo(event.contact.id);
+      yield ContactIsLoadedState(contact);
+    }
     if (event is EditContactEvent) {
       print('bloc ${event.contact}');
       await contactRepo.updateContactRepo(event.contact);
       List<Contact> contacts = await contactRepo.getAllContactsRepo();
+      yield ContactsIsLoadedState(contacts);
+    }
+    if (event is FetchFavoriteContactEvent) {
+      print('bloc ${event.contact}');
+
+      List contacts = await contactRepo.fetchFavoriteContacts();
       yield ContactsIsLoadedState(contacts);
     }
     if (event is DeleteContactEvent) {

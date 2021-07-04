@@ -7,6 +7,7 @@ class Contact {
   String email;
   String phone;
   String imgPath;
+  int favorite;
   double latitude;
   double longitude;
 
@@ -17,6 +18,7 @@ class Contact {
       this.email,
       this.phone,
       this.imgPath,
+      this.favorite,
       this.latitude,
       this.longitude});
 
@@ -29,6 +31,7 @@ class Contact {
     this.email = Contact['email'];
     this.phone = Contact['phone'];
     this.imgPath = Contact['img'];
+    this.favorite = Contact['favorite'];
     this.latitude = Contact['latitude'];
     this.longitude = Contact['longitude'];
   }
@@ -36,10 +39,11 @@ class Contact {
   Contact.fromMap(Map map) {
     id = map[columnId];
     name = map[columnName];
-    lastName = map[columnLastname];
+    lastName = map[columnLastName];
     email = map[columnEmail];
     phone = map[columnPhone];
     imgPath = map[columnImg];
+    favorite = map[columnFavorite];
     latitude = map[columnLatitude];
     longitude = map[columnLongitude];
   }
@@ -51,6 +55,7 @@ class Contact {
     email = map['email'];
     phone = map['phone'];
     imgPath = map['img'];
+    favorite = map['favorite'];
     latitude = map['latitude'];
     longitude = map['longitude'];
   }
@@ -63,6 +68,7 @@ class Contact {
       'email': email,
       'phone': phone,
       'img': imgPath,
+      'favorite': favorite,
       'latitude': latitude,
       'longitude': longitude
     };

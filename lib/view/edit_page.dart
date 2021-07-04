@@ -26,7 +26,7 @@ class _EditedtPageState extends State<EditedtPage> {
   final _lastNameFormKey= GlobalKey<FormState>();
   bool _userEdited = false;
   Contact _editedContact;
-  bool isvalid = false;
+  bool valid = false;
   File imageFile;
   final imagePicker = ImagePicker();
 
@@ -42,6 +42,8 @@ class _EditedtPageState extends State<EditedtPage> {
     _lastNameController.text = _editedContact.lastName;
     _emailsController.text = _editedContact.email;
     _phoneController.text = _editedContact.phone;
+    _editedContact.latitude = contact.latitude;
+    _editedContact.longitude = contact.longitude;
   }
 
   Future getFromCamera() async {
@@ -114,7 +116,6 @@ class _EditedtPageState extends State<EditedtPage> {
                             fit: BoxFit.cover,
                           ),
                         ),
-                        // child: Image.asset('assets/images/header.png', fit: BoxFit.fill,),
                       ),
                   ),
                   Padding(
@@ -228,12 +229,13 @@ class _EditedtPageState extends State<EditedtPage> {
                       child: FloatingActionButton(
                           child: Icon(Icons.save),
                           onPressed: () {
-                            Contact contact = Contact();
-                            contact.name = this._nameController.text;
-                            contact.lastName = this._lastNameController.text;
-                            contact.phone = this._phoneController.text;
-                            contact.email = this._emailsController.text;
-                            contact.imgPath = contact.imgPath ;
+                            _editedContact.name = this._nameController.text;
+                            _editedContact.lastName = this._lastNameController.text;
+                            _editedContact.phone = this._phoneController.text;
+                            _editedContact.email = this._emailsController.text;
+                            _editedContact.imgPath = contact.imgPath ;
+                            _editedContact.latitude = contact.latitude;
+                            _editedContact.longitude = contact.longitude;
                             final contactBloc = BlocProvider.of<ContactBloc>(context);
                             contactBloc.add(EditContactEvent(_editedContact));
                             Navigator.pop(context);
