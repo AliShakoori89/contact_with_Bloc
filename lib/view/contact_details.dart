@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
+import 'package:phonebook_with_bloc/view/bottomnavigationbar/contacts_page.dart';
 import 'package:phonebook_with_bloc/view/home_page.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
@@ -20,7 +21,6 @@ class ContactDetails extends StatefulWidget {
 
 class ContactDetailsState extends State<ContactDetails> {
   final Contact contact;
-  Color _favIconColor;
   Contact _editedContact;
 
   ContactDetailsState(this.contact);
@@ -42,25 +42,30 @@ class ContactDetailsState extends State<ContactDetails> {
   Widget build(BuildContext context) {
     final contactBloc = BlocProvider.of<ContactBloc>(context);
     contactBloc.add(FetchContactEvent(widget.contact));
-    return BlocBuilder<ContactBloc, ContactState>(builder: (context, state) {
-      if (state is ContactIsLoadedState) {
-        print("oftad");
-        return ContactDetailsView(
+    return WillPopScope(
+      onWillPop: () async{
+        return Navigator.push(
             context,
-            state.getContact.phone,
-            state.getContact.email,
-            state.getContact.name,
-            state.getContact.lastName,
-            state.getContact.imgPath);
-      }
-      return Center(
-        child: Text("ops error"),
-      );
-    });
+            new MaterialPageRoute(
+                builder: (context) => new ContactPage()));
+      },
+      child: BlocBuilder<ContactBloc, ContactState>(builder: (context, state) {
+        if (state is ContactIsLoadedState) {
+          return ContactDetailsView(
+              context,
+              state.getContact.phone,
+              state.getContact.email,
+              state.getContact.name,
+              state.getContact.lastName,
+              state.getContact.imgPath);
+        }
+        return Center(
+        );
+      }),
+    );
   }
 
   Icon setFavoriteIcon() {
-    print("contact.favorite is :");
     print(contact.favorite);
     if (contact.favorite == 1) {
       contact.favorite = 0;

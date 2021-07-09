@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:phonebook_with_bloc/view/bottomnavigationbar/call_logs.dart';
 import 'package:phonebook_with_bloc/view/bottomnavigationbar/favorite_contacts.dart';
 import 'bottomnavigationbar/contacts_page.dart';
