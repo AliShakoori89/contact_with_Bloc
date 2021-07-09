@@ -6,8 +6,8 @@ import 'package:map_launcher/map_launcher.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:phonebook_with_bloc/view/home_page.dart';
-// import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-// import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactDetails extends StatefulWidget {
   final Contact contact;
@@ -155,8 +155,8 @@ class ContactDetailsState extends State<ContactDetails> {
                                             color: Colors.green,
                                           ),
                                           onTap: () {
-                                            // UrlLauncher.launch(
-                                            //     "tel:${widget.contact.phone}");
+                                            UrlLauncher.launch(
+                                                "tel:${widget.contact.phone}");
                                           },
                                         ),
                                       ),
@@ -198,7 +198,8 @@ class ContactDetailsState extends State<ContactDetails> {
                                               "assets/icons/gmail.png",
                                               width: 25,
                                             ),
-                                            onTap: () {
+                                            onTap: () async {
+                                              print('aaaaa');
                                               _launchURL('$email', '', '');
                                             },
                                           ),
@@ -336,10 +337,10 @@ class ContactDetailsState extends State<ContactDetails> {
 
   void _launchURL(String toMailId, String subject, String body) async {
     var url = 'mailto:$toMailId?subject=$subject&body=$body';
-    // if (await canLaunch(url)) {
-    //   await launch(url);
-    // } else {
-    //   throw 'Could not launch $url';
-    // }
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
