@@ -27,21 +27,24 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // backgroundColor: Colors.grey.withOpacity(0.5),
         bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
+            items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                   icon: Icon(Icons.contacts),
                   title: Text('Contact'),
-                  backgroundColor: Colors.white70),
+                  backgroundColor: Colors.grey[300]
+                  ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.access_time_rounded),
                 title: Text('Resent'),
-                backgroundColor: Colors.white70,
-              ),
+                  backgroundColor: Colors.grey[300]
+                ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.star),
                   title: Text('Favorites'),
-                  backgroundColor: Colors.white70),
+                backgroundColor: Colors.grey[300]
+                  ),
             ],
             type: BottomNavigationBarType.shifting,
             currentIndex: _selectedIndex,

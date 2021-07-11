@@ -27,7 +27,7 @@ class Contact {
   Contact.Map(dynamic Contact) {
     this.id = Contact['id'];
     this.name = Contact['name'];
-    this.lastName = Contact['lastname'];
+    this.lastName = Contact['lastName'];
     this.email = Contact['email'];
     this.phone = Contact['phone'];
     this.imgPath = Contact['img'];
@@ -51,7 +51,7 @@ class Contact {
   Contact.MaptoObject(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
-    lastName = map['lastname'];
+    lastName = map['lastName'];
     email = map['email'];
     phone = map['phone'];
     imgPath = map['img'];
@@ -64,7 +64,7 @@ class Contact {
     return {
       'id': id,
       'name': name,
-      'lastname': lastName,
+      'lastName': lastName,
       'email': email,
       'phone': phone,
       'img': imgPath,

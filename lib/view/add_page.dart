@@ -71,10 +71,8 @@ class AddEditPageState extends State<AddEditPage> {
             child: Column(
               children: <Widget>[
                 Container(
-                  height: MediaQuery.of(context).size.height / 4.5,
-                  width: MediaQuery.of(context).size.height / 2,
+                  height: MediaQuery.of(context).size.height / 4.1,
                   decoration: BoxDecoration(
-                    border: Border.all(),
                     borderRadius: BorderRadius.circular(20.0),
                     image: DecorationImage(
                       image: AssetImage('assets/images/header.png'),
@@ -82,6 +80,7 @@ class AddEditPageState extends State<AddEditPage> {
                     ),
                   ),
                 ),
+                SizedBox(height:  MediaQuery.of(context).size.height/100 ,),
                 buildSafeArea(context),
               ],
             ),
@@ -152,157 +151,153 @@ class AddEditPageState extends State<AddEditPage> {
         });
   }
 
-  SafeArea buildSafeArea(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height / 14),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 60),
-              child: TextFieldClass(
-                type: 'name',
-                formKey: _nameFormKey,
-                controller: _nameController,
-                hintText: 'Name',
-                alarmText: 'Name',
-                icon: Icons.person,
-                userEdited: true,
-              ),
+  Container buildSafeArea(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          color: Colors.grey[400].withOpacity(0.5),
+          borderRadius: BorderRadius.circular(15)
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: MediaQuery.of(context).size.height / 14),
+          Padding(
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.height / 60),
+            child: TextFieldClass(
+              type: 'name',
+              formKey: _nameFormKey,
+              controller: _nameController,
+              hintText: 'Name',
+              alarmText: 'Name',
+              icon: Icons.person,
+              userEdited: true,
             ),
+          ),
 
-            ///name
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 60),
-              child: TextFieldClass(
-                type: 'lastName',
-                formKey: _lastNameFormKey,
-                controller: _lastNameController,
-                hintText: 'LastName',
-                alarmText: 'LastName',
-                icon: Icons.person,
-                userEdited: true,
-              ),
+          ///name
+          Padding(
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.height / 60),
+            child: TextFieldClass(
+              type: 'lastName',
+              formKey: _lastNameFormKey,
+              controller: _lastNameController,
+              hintText: 'LastName',
+              alarmText: 'LastName',
+              icon: Icons.person,
+              userEdited: true,
             ),
+          ),
 
-            ///lastname
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 60),
-              child: TextFieldClass(
-                type: 'email',
-                controller: _emailsController,
-                hintText: 'Email',
-                alarmText: 'Email',
-                icon: Icons.email,
-                userEdited: true,
-              ),
+          ///lastname
+          Padding(
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.height / 60),
+            child: TextFieldClass(
+              type: 'email',
+              controller: _emailsController,
+              hintText: 'Email',
+              alarmText: 'Email',
+              icon: Icons.email,
+              userEdited: true,
             ),
+          ),
 
-            ///email
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 60),
-              child: TextFieldClass(
-                keyboardType: TextInputType.number,
-                maxLength: 11,
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+          ///email
+          Padding(
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.height / 60),
+            child: TextFieldClass(
+              keyboardType: TextInputType.number,
+              maxLength: 11,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+              ],
+              type: 'phone',
+              controller: _phoneController,
+              hintText: 'PhoneNumber',
+              alarmText: 'PhoneNumber',
+              icon: Icons.phone,
+              userEdited: true,
+            ),
+          ),
+
+          Padding(
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.height / 60,
+                top: MediaQuery.of(context).size.height / 20,
+                bottom: MediaQuery.of(context).size.height / 100),
+            child: GestureDetector(
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).size.height / 100),
+                    child: Icon(Icons.add_location_alt),
+                  ),
+                  Text('   Add Route ->      '),
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(),
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/mapRoute.jpg'),
+                            fit: BoxFit.fill)),
+                    width: MediaQuery.of(context).size.height / 7,
+                    height: MediaQuery.of(context).size.height / 25,
+                    // child: Icon(
+                    //   Icons.add_location_alt ,
+                    //   color: Colors.grey[850]),
+                  ),
                 ],
-                type: 'phone',
-                controller: _phoneController,
-                hintText: 'PhoneNumber',
-                alarmText: 'PhoneNumber',
-                icon: Icons.phone,
-                userEdited: true,
               ),
+              onTap: () async {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MapScreen()));
+              },
             ),
+          ),
 
-            Padding(
-              padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.height / 60,
-                  top: MediaQuery.of(context).size.height / 20,
-                  bottom: MediaQuery.of(context).size.height / 100),
-              child: GestureDetector(
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height / 100),
-                      child: Icon(Icons.add_location_alt),
-                    ),
-                    Text('   Add Route ->      '),
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(),
-                          image: DecorationImage(
-                              image: AssetImage('assets/images/mapRoute.jpg'),
-                              fit: BoxFit.fill)),
-                      width: MediaQuery.of(context).size.height / 7,
-                      height: MediaQuery.of(context).size.height / 25,
-                      // child: Icon(
-                      //   Icons.add_location_alt ,
-                      //   color: Colors.grey[850]),
-                    ),
-                  ],
-                ),
-                onTap: () async {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => MapScreen()));
-                },
-              ),
-            ),
-
-            ///phone
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Padding(
+          ///phone
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Padding(
                 padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 7,
+                  top: MediaQuery.of(context).size.height / 10,
+                  right: MediaQuery.of(context).size.width / 15,
                 ),
-                child: Container(
-                    width: MediaQuery.of(context).size.height / 12,
-                    child: FloatingActionButton(
-                        child: Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundImage: AssetImage(
-                                "assets/images/header.png",
-                              ),
-                            ),
-                            Center(child: Icon(Icons.save)),
-                          ],
-                        ),
-                        onPressed: () {
-                          if (_nameFormKey.currentState.validate() &&
-                              _lastNameFormKey.currentState.validate()) {
-                            Contact contact = Contact();
-                            contact.name = this._nameController.text;
-                            contact.lastName = this._lastNameController.text;
-                            contact.phone = this._phoneController.text;
-                            contact.email = this._emailsController.text;
-                            if (imageFile != null) {
-                              contact.imgPath = imageFile.path;
-                            } else {
-                              contact.imgPath = null;
-                            }
-                            contact.favorite = 0;
-                            contact.latitude = MapScreenState.latitude;
-                            contact.longitude = MapScreenState.longitude;
-                            final contactBloc =
-                                BlocProvider.of<ContactBloc>(context);
-                            contactBloc.add(AddContactEvent(contact));
-                            Navigator.pop(context);
-                          }
-                        })),
-              ),
-            )
-          ],
-        ),
+                child: GestureDetector(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.green,
+                    child: Icon(Icons.save, color: Colors.white,),
+                  ),
+                  onTap: (){
+                    if (_nameFormKey.currentState.validate() &&
+                        _lastNameFormKey.currentState.validate()) {
+                      Contact contact = Contact();
+                      contact.name = this._nameController.text;
+                      contact.lastName = this._lastNameController.text;
+                      contact.phone = this._phoneController.text;
+                      contact.email = this._emailsController.text;
+                      if (imageFile != null) {
+                        contact.imgPath = imageFile.path;
+                      } else {
+                        contact.imgPath = null;
+                      }
+                      contact.favorite = 0;
+                      contact.latitude = MapScreenState.latitude;
+                      contact.longitude = MapScreenState.longitude;
+                      final contactBloc =
+                      BlocProvider.of<ContactBloc>(context);
+                      contactBloc.add(AddContactEvent(contact));
+                      Navigator.pop(context);
+                    }
+                  },
+                )
+            ),
+          )
+        ],
       ),
     );
   }

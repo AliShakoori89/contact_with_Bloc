@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
-import 'package:phonebook_with_bloc/view/bottomnavigationbar/contacts_page.dart';
+import 'package:phonebook_with_bloc/view/edit_page.dart';
 import 'package:phonebook_with_bloc/view/home_page.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
@@ -47,7 +47,7 @@ class ContactDetailsState extends State<ContactDetails> {
         return Navigator.push(
             context,
             new MaterialPageRoute(
-                builder: (context) => new ContactPage()));
+                builder: (context) => new HomePage()));
       },
       child: BlocBuilder<ContactBloc, ContactState>(builder: (context, state) {
         if (state is ContactIsLoadedState) {
@@ -78,105 +78,136 @@ class ContactDetailsState extends State<ContactDetails> {
 
   Widget ContactDetailsView(
       context, phone, String email, String name, String lastname, String img) {
-    return WillPopScope(
-      onWillPop: () {
-        Navigator.push(context,
-            new MaterialPageRoute(builder: (context) => new HomePage()));
-        return Future.value(true);
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          color: Colors.grey[350],
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              // background image and bottom contents
-              Column(
-                children: <Widget>[
-                  Stack(
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 3.65,
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(
-                                  color: Colors.white60,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        color: Colors.white,
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            // background image and bottom contents
+            Column(
+              children: <Widget>[
+                Stack(
+                  children: [
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height / 3.9,
+                        ),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height/1.35,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400].withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(20.0)),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height / 8,
                                 ),
-                                borderRadius: BorderRadius.circular(20.0)),
-                            width: MediaQuery.of(context).size.height / 2.05,
-                            height: MediaQuery.of(context).size.height / 1.4,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height / 5,
-                                    left:
-                                        MediaQuery.of(context).size.height / 50,
-                                  ),
-                                  child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: setFavoriteIcon(),
+                                      onPressed: () {
+                                        final contactBloc = BlocProvider.of<ContactBloc>(context);
+                                        contactBloc.add(AddContactToFavoriteEvent(contact));
+                                      },
+                                    ),
+                                    IconButton(
+                                        icon: Icon(Icons.edit),
+                                    onPressed: (){
+                                      Navigator.push(
+                                          context,
+                                          new MaterialPageRoute(
+                                              builder: (context) => new EditedtPage(contact: widget.contact)));
+                                    },),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height / 30,
+                                  left: MediaQuery.of(context).size.height / 50,
+                                  right:  MediaQuery.of(context).size.height / 50,
+                                ),
+                                child: Center(
+                                    child: Container(
+                                      height: MediaQuery.of(context).size.height /10,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(25)
+                                      ),
                                       child: Row(
-                                    mainAxisAlignment:
+                                        mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
                                         children: [
-                                          Icon(
-                                            Icons.phone_android_outlined,
-                                            color: Colors.grey,
-                                          ),
-                                          SizedBox(
-                                              width: MediaQuery.of(context).size.height / 50),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                          Row(
                                             children: [
-                                              Text('Mobile',
-                                                  style: TextStyle(
-                                                      fontSize: 12.0,
-                                                      color: Colors.grey)),
+                                              Icon(
+                                                Icons.phone_android_outlined,
+                                                color: Colors.grey,
+                                              ),
                                               SizedBox(
-                                                  height: MediaQuery.of(context).size.height / 200),
-                                              Text(
-                                                '$phone',
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.black),
-                                              )
+                                                  width: MediaQuery.of(context).size.height / 20),
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text('Mobile',
+                                                      style: TextStyle(
+                                                          fontSize: 12.0,
+                                                          color: Colors.grey)),
+                                                  SizedBox(
+                                                      height: MediaQuery.of(context).size.height / 200),
+                                                  Text(
+                                                    '$phone',
+                                                    style: TextStyle(
+                                                        fontSize: 15,
+                                                        color: Colors.black),
+                                                  )
+                                                ],
+                                              ),
                                             ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                              right: MediaQuery.of(context).size.height / 40,),
+                                            child: GestureDetector(
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.green,
+                                                child: Icon(
+                                                  Icons.phone,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                UrlLauncher.launch(
+                                                    "tel:${widget.contact.phone}");
+                                              },
+                                            ),
                                           ),
                                         ],
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          right: MediaQuery.of(context).size.height / 40,),
-                                        child: GestureDetector(
-                                          child: Icon(
-                                            Icons.phone,
-                                            color: Colors.green,
-                                          ),
-                                          onTap: () {
-                                            UrlLauncher.launch(
-                                                "tel:${widget.contact.phone}");
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  )),
+                                    )),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height / 50,
+                                  left: MediaQuery.of(context).size.height / 50,
+                                  right:  MediaQuery.of(context).size.height / 50,
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height / 20,
-                                    left: MediaQuery.of(context).size.height / 50,
-                                  ),
-                                  child: Center(
+                                child: Center(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height /10,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(25)
+                                    ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -184,8 +215,9 @@ class ContactDetailsState extends State<ContactDetails> {
                                               Icons.email,
                                               color: Colors.grey,
                                             ),
-                                            SizedBox(width: MediaQuery.of(context).size.height / 50),
+                                            SizedBox(width: MediaQuery.of(context).size.height / 20),
                                             Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text('Email',style: TextStyle(fontSize: 12.0,color: Colors.grey)),
@@ -199,12 +231,14 @@ class ContactDetailsState extends State<ContactDetails> {
                                         Padding(
                                           padding: EdgeInsets.only(right: MediaQuery.of(context).size.height / 40,),
                                           child: GestureDetector(
-                                            child: Image.asset(
-                                              "assets/icons/gmail.png",
-                                              width: 25,
+                                            child: CircleAvatar(
+                                              backgroundColor: Colors.red,
+                                              child: Icon(
+                                                Icons.email,
+                                                color: Colors.white,
+                                              )
                                             ),
                                             onTap: () async {
-                                              print('aaaaa');
                                               _launchURL('$email', '', '');
                                             },
                                           ),
@@ -213,15 +247,23 @@ class ContactDetailsState extends State<ContactDetails> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: MediaQuery.of(context).size.height / 20,
-                                    left: MediaQuery.of(context).size.height / 50,
-                                  ),
-                                  child: Center(
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: MediaQuery.of(context).size.height / 50,
+                                  left: MediaQuery.of(context).size.height / 50,
+                                  right:  MediaQuery.of(context).size.height / 50,
+                                ),
+                                child: Center(
+                                  child: Container(
+                                    height: MediaQuery.of(context).size.height /10,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(25)
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         Row(
                                           children: [
@@ -229,8 +271,10 @@ class ContactDetailsState extends State<ContactDetails> {
                                               Icons.location_on,
                                               color: Colors.grey,
                                             ),
-                                            SizedBox(width: MediaQuery.of(context).size.height / 50),
-                                            Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                            SizedBox(width: MediaQuery.of(context).size.height / 20),
+                                            Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text('Location',
                                                     style: TextStyle(fontSize: 12.0,color: Colors.grey)),
@@ -246,9 +290,12 @@ class ContactDetailsState extends State<ContactDetails> {
                                             right: MediaQuery.of(context).size.height / 40,
                                           ),
                                           child: GestureDetector(
-                                              child: Icon(
-                                                Icons.location_on,
-                                                color: Colors.blue,
+                                              child: CircleAvatar(
+                                                backgroundColor: Colors.blue,
+                                                child: Icon(
+                                                  Icons.location_on,
+                                                  color: Colors.white,
+                                                ),
                                               ),
                                               onTap: () async {
                                                 final availableMaps = await MapLauncher.installedMaps;
@@ -264,77 +311,58 @@ class ContactDetailsState extends State<ContactDetails> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    right: MediaQuery.of(context).size.height / 2.43,
-                                    top: MediaQuery.of(context).size.height / 30,
-                                  ),
-                                  child: IconButton(
-                                    icon: setFavoriteIcon(),
-                                    onPressed: () {
-                                      final contactBloc = BlocProvider.of<ContactBloc>(context);
-                                      contactBloc.add(AddContactToFavoriteEvent(contact));
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 60,
-                          ),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 4,
-                            width: MediaQuery.of(context).size.height / 2.05,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20.0),
-                              image: DecorationImage(
-                                image: AssetImage('assets/images/header.png'),
-                                fit: BoxFit.cover,
                               ),
-                            ),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              ),
-              // Profile image
-              Positioned(
-                top: 150.0, // (background container size) - (circle height / 2)
-                child: CircleAvatar(
-                    radius: 55,
-                    backgroundColor: Colors.white,
-                    child: img == null
-                        ? Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                image: DecorationImage(
-                                    image: AssetImage('assets/images/User.png'),
-                                    fit: BoxFit.fill)),
-                          )
-                        : Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                image: DecorationImage(
-                                    image: Image.file(File(img)).image,
-                                    fit: BoxFit.fill)),
-                          )
-                    // Image.file(_image),
                     ),
+                    Center(
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 4.1,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(20.0),
+                          image: DecorationImage(
+                            image: AssetImage('assets/images/header.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Profile image
+            Positioned(
+              top: 150.0, // (background container size) - (circle height / 2)
+              child: CircleAvatar(
+                  radius: 55,
+                  backgroundColor: Colors.white,
+                  child: img == null
+                      ? Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/User.png'),
+                            fit: BoxFit.fill)),
+                  )
+                      : Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                            image: Image.file(File(img)).image,
+                            fit: BoxFit.fill)),
+                  )
+                // Image.file(_image),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
