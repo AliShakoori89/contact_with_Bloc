@@ -12,6 +12,8 @@ class ContactPage extends StatefulWidget {
 
 class _ContactPageState extends State<ContactPage> {
 
+  DateTime currentBackPressTime;
+
   @override
   Widget build(BuildContext context) {
     print("Contact page is loading");
@@ -50,7 +52,10 @@ class _ContactPageState extends State<ContactPage> {
               )
             ],
           ),
-          body: contactsListViewBuilder(context, state.getContacts),
+          body: WillPopScope(
+              child: contactsListViewBuilder(context, state.getContacts),
+            onWillPop: _onBackPressed,
+          ),
         );
       }
       return Container(
@@ -58,6 +63,37 @@ class _ContactPageState extends State<ContactPage> {
         child: Text("oops nothing here", style: TextStyle(color: Colors.white12,fontSize: 14.0),),
       );
     });
+  }
+
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.grey[300],
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.all(Radius.circular(10.0))
+          ),
+          title: Text('Confirm'),
+          content: Text('Do you want to exit the App'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop(false); //Will not exit the App
+              },
+            ),
+            FlatButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop(true); //Will exit the App
+              },
+            )
+          ],
+        );
+      },
+    ) ?? false;
   }
 
   Widget contactsListViewBuilder(context, contacts) {

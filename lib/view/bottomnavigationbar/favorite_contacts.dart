@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
 import 'package:phonebook_with_bloc/model/contact_model.dart';
 import 'package:phonebook_with_bloc/view/card_view.dart';
+import 'package:phonebook_with_bloc/view/home_page.dart';
 
 class FavoriteContacts extends StatefulWidget {
   final Contact contact;
@@ -35,7 +36,8 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
               ),
             )
           ),
-          body: contactsListViewBuilder(context, state.getContacts),
+          body: WillPopScope(
+              child: contactsListViewBuilder(context, state.getContacts)),
         );
       }
     return Container(
