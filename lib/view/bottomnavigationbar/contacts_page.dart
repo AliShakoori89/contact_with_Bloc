@@ -58,10 +58,7 @@ class _ContactPageState extends State<ContactPage> {
           ),
         );
       }
-      return Container(
-        color: Colors.white,
-        child: Text("oops nothing here", style: TextStyle(color: Colors.white12,fontSize: 14.0),),
-      );
+      return Container();
     });
   }
 
@@ -98,28 +95,31 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget contactsListViewBuilder(context, contacts) {
     return Center(
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.grey[400].withOpacity(0.5),
-          borderRadius: BorderRadius.circular(15)
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 10,
+          bottom: 5,
         ),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.grey[400].withOpacity(0.5),
+            borderRadius: BorderRadius.circular(15)
+          ),
+            child: ListView.builder(
+                itemCount: contacts.length,
+                itemBuilder: (BuildContext context, int index) {
 
-          width: MediaQuery.of(context).size.width/1.05,
-          height: MediaQuery.of(context).size.height / 1.4,
-          child: ListView.builder(
-              itemCount: contacts.length,
-              itemBuilder: (BuildContext context, int index) {
-
-                return Dismissible(
-                    key: Key('item ${contacts[index]}'),
-                    onDismissed: (DismissDirection direction) {
-                      if (direction == DismissDirection.startToEnd) {} else {
-                        print('Remove item');
-                      }
-                    },
-                    child: CardView(contacts[index]));
-              }
-          )
+                  return Dismissible(
+                      key: Key('item ${contacts[index]}'),
+                      onDismissed: (DismissDirection direction) {
+                        if (direction == DismissDirection.startToEnd) {} else {
+                          print('Remove item');
+                        }
+                      },
+                      child: CardView(contacts[index]));
+                }
+            )
+        ),
       ),
     );
   }

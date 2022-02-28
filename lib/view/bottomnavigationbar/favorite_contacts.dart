@@ -47,27 +47,31 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
 
   Widget contactsListViewBuilder(context, contacts) {
       return Center(
-        child: Container(
-            width: MediaQuery.of(context).size.width/1.05,
-            height: MediaQuery.of(context).size.height / 1.4,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.grey[400].withOpacity(0.5),
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 5
           ),
-            child: ListView.builder(
-                itemCount: contacts.length,
-                itemBuilder: (BuildContext context, int index) {
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.grey[400].withOpacity(0.5),
+            ),
+              child: ListView.builder(
+                  itemCount: contacts.length,
+                  itemBuilder: (BuildContext context, int index) {
 
-                  return Dismissible(
-                      key: Key('item ${contacts[index]}'),
-                      onDismissed: (DismissDirection direction) {
-                        if (direction == DismissDirection.startToEnd) {} else {
-                          print('Remove item');
-                        }
-                      },
-                      child: CardView(contacts[index]));
-                }
-            )
+                    return Dismissible(
+                        key: Key('item ${contacts[index]}'),
+                        onDismissed: (DismissDirection direction) {
+                          if (direction == DismissDirection.startToEnd) {} else {
+                            print('Remove item');
+                          }
+                        },
+                        child: CardView(contacts[index]));
+                  }
+              )
+          ),
         ),
       );
   }

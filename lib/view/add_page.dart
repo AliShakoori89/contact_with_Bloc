@@ -63,31 +63,61 @@ class AddEditPageState extends State<AddEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.save_outlined),
+        backgroundColor: Colors.green,
+        onPressed: (){
+          if (_nameFormKey.currentState.validate() &&
+              _lastNameFormKey.currentState.validate()) {
+            Contact contact = Contact();
+            contact.name = this._nameController.text;
+            contact.lastName = this._lastNameController.text;
+            contact.phone = this._phoneController.text;
+            contact.email = this._emailsController.text;
+            if (imageFile != null) {
+              contact.imgPath = imageFile.path;
+            } else {
+              contact.imgPath = null;
+            }
+            contact.favorite = 0;
+            contact.latitude = MapScreenState.latitude;
+            contact.longitude = MapScreenState.longitude;
+            final contactBloc =
+            BlocProvider.of<ContactBloc>(context);
+            contactBloc.add(AddContactEvent(contact));
+            Navigator.pop(context);
+          }
+        },
+      ),
       body: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          // background image and bottom contents
-          SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
+        alignment: Alignment.topCenter,
+        children: [
+          Column(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Container(
                   height: MediaQuery.of(context).size.height / 4.1,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.0),
+                    borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15)
+                    ),
                     image: DecorationImage(
                       image: AssetImage('assets/images/header.png'),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                SizedBox(height:  MediaQuery.of(context).size.height/100 ,),
-                buildSafeArea(context),
-              ],
-            ),
+              ),
+              SizedBox(height:  MediaQuery.of(context).size.height/100 ,),
+              Expanded(
+                flex: 3,
+                  child: buildSafeArea(context)),
+            ],
           ),
-          // Profile image
-          Positioned(
-            top: MediaQuery.of(context).size.height / 6,
+          Container(
+            alignment: Alignment(0.0, -0.6),
             child: GestureDetector(
               onTap: () {
                 showPicker(context);
@@ -97,27 +127,27 @@ class AddEditPageState extends State<AddEditPage> {
                   backgroundColor: Colors.white,
                   child: imageFile == null
                       ? Container(
-                          width: MediaQuery.of(context).size.height / 8,
-                          height: MediaQuery.of(context).size.height / 8,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image: DecorationImage(
-                                  image: AssetImage('assets/images/User.png'),
-                                  fit: BoxFit.fill)),
-                        )
+                    width: MediaQuery.of(context).size.height / 8,
+                    height: MediaQuery.of(context).size.height / 8,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                            image: AssetImage('assets/images/User.png'),
+                            fit: BoxFit.fill)),
+                  )
                       : Container(
-                          width: MediaQuery.of(context).size.height / 9,
-                          height: MediaQuery.of(context).size.height / 9,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              image: DecorationImage(
-                                  image: FileImage(imageFile),
-                                  fit: BoxFit.fill)),
-                        )),
+                    width: MediaQuery.of(context).size.height / 9,
+                    height: MediaQuery.of(context).size.height / 9,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                            image: FileImage(imageFile),
+                            fit: BoxFit.fill)),
+                  )),
             ),
-          )
+          ),
         ],
-      ),
+      )
     );
   }
 
@@ -153,7 +183,7 @@ class AddEditPageState extends State<AddEditPage> {
 
   Container buildSafeArea(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height / 1.8,
       decoration: BoxDecoration(
           color: Colors.grey[400].withOpacity(0.5),
           borderRadius: BorderRadius.circular(15)
@@ -227,8 +257,7 @@ class AddEditPageState extends State<AddEditPage> {
           Padding(
             padding: EdgeInsets.only(
                 left: MediaQuery.of(context).size.height / 60,
-                top: MediaQuery.of(context).size.height / 20,
-                bottom: MediaQuery.of(context).size.height / 100),
+                top: MediaQuery.of(context).size.height / 20),
             child: GestureDetector(
               child: Row(
                 children: [
@@ -258,45 +287,7 @@ class AddEditPageState extends State<AddEditPage> {
               },
             ),
           ),
-
           ///phone
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).size.height / 10,
-                  right: MediaQuery.of(context).size.width / 15,
-                ),
-                child: GestureDetector(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.green,
-                    child: Icon(Icons.save, color: Colors.white,),
-                  ),
-                  onTap: (){
-                    if (_nameFormKey.currentState.validate() &&
-                        _lastNameFormKey.currentState.validate()) {
-                      Contact contact = Contact();
-                      contact.name = this._nameController.text;
-                      contact.lastName = this._lastNameController.text;
-                      contact.phone = this._phoneController.text;
-                      contact.email = this._emailsController.text;
-                      if (imageFile != null) {
-                        contact.imgPath = imageFile.path;
-                      } else {
-                        contact.imgPath = null;
-                      }
-                      contact.favorite = 0;
-                      contact.latitude = MapScreenState.latitude;
-                      contact.longitude = MapScreenState.longitude;
-                      final contactBloc =
-                      BlocProvider.of<ContactBloc>(context);
-                      contactBloc.add(AddContactEvent(contact));
-                      Navigator.pop(context);
-                    }
-                  },
-                )
-            ),
-          )
         ],
       ),
     );
@@ -371,7 +362,7 @@ class _TextFieldClassState extends State<TextFieldClass> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height / 12,
-      width: MediaQuery.of(context).size.height / 2.5,
+      width: MediaQuery.of(context).size.width / 1.2,
       child: Form(
           key: formKey,
           child: TextFormField(

@@ -23,13 +23,15 @@ class _CallLogsState extends State<CallLogs> {
         )
       ),
       body: WillPopScope(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 10,
+            bottom: 5
+          ),
           child: Container(
-            width: MediaQuery.of(context).size.width/1.05,
-            height: MediaQuery.of(context).size.height / 1.4,
             decoration: BoxDecoration(
                 color: Colors.grey[400].withOpacity(0.5),
-              borderRadius: BorderRadius.circular(15)
+                borderRadius: BorderRadius.circular(15)
             ),
             child: FutureBuilder(
                 future: CallLog.get(),
@@ -43,36 +45,36 @@ class _CallLogsState extends State<CallLogs> {
                       itemBuilder: (context, index) {
                         var entry = entries[index];
                         return Container(
-                          margin: EdgeInsets.all(MediaQuery.of(context).size.height / 80),
-                          child: Column(
-                            children: [
-                              Divider(
-                                endIndent: 30.0,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 80),
-                                        child: Text('${entry.name}',style: TextStyle(fontSize: 20),),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(height: MediaQuery.of(context).size.height / 80,),
-                                      Text('${entry.number}'),
-                                      Text('${entry.callType}'),
-                                      Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp)}'),
-                                      Text('${entry.duration}',),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ],
-                          )
+                            margin: EdgeInsets.all(MediaQuery.of(context).size.height / 80),
+                            child: Column(
+                              children: [
+                                Divider(
+                                  endIndent: 30.0,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 80),
+                                          child: Text('${entry.name}',style: TextStyle(fontSize: 20),),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        SizedBox(height: MediaQuery.of(context).size.height / 80,),
+                                        Text('${entry.number}'),
+                                        Text('${entry.callType}'),
+                                        Text('${DateTime.fromMillisecondsSinceEpoch(entry.timestamp)}'),
+                                        Text('${entry.duration}',),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )
                         );
                       },
                       itemCount: entries.length,
