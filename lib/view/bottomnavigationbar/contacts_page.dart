@@ -1,4 +1,5 @@
 import 'package:english_words/english_words.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phonebook_with_bloc/bloc/contactPage_bloc.dart';
@@ -94,32 +95,22 @@ class _ContactPageState extends State<ContactPage> {
   }
 
   Widget contactsListViewBuilder(context, contacts) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(
-          top: 10,
-          bottom: 5,
-        ),
-        child: Container(
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 10,
+        bottom: 5,
+      ),
+      child: Container(
           decoration: BoxDecoration(
               color: Colors.grey[400].withOpacity(0.5),
-            borderRadius: BorderRadius.circular(15)
+              borderRadius: BorderRadius.circular(15)
           ),
-            child: ListView.builder(
-                itemCount: contacts.length,
-                itemBuilder: (BuildContext context, int index) {
-
-                  return Dismissible(
-                      key: Key('item ${contacts[index]}'),
-                      onDismissed: (DismissDirection direction) {
-                        if (direction == DismissDirection.startToEnd) {} else {
-                          print('Remove item');
-                        }
-                      },
-                      child: CardView(contacts[index]));
-                }
-            )
-        ),
+          child: ListView.builder(
+              itemCount: contacts.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CardView(contacts[index]);
+              }
+          )
       ),
     );
   }

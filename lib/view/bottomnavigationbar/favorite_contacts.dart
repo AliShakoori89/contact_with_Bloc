@@ -36,8 +36,7 @@ class _FavoriteContactsState extends State<FavoriteContacts> {
               ),
             )
           ),
-          body: WillPopScope(
-              child: contactsListViewBuilder(context, state.getContacts)),
+          body: contactsListViewBuilder(context, state.getContacts)
         );
       }
     return Container(

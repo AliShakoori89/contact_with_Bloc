@@ -49,19 +49,21 @@ class ContactDetailsState extends State<ContactDetails> {
             new MaterialPageRoute(
                 builder: (context) => new HomePage()));
       },
-      child: BlocBuilder<ContactBloc, ContactState>(builder: (context, state) {
-        if (state is ContactIsLoadedState) {
-          return ContactDetailsView(
-              context,
-              state.getContact.phone,
-              state.getContact.email,
-              state.getContact.name,
-              state.getContact.lastName,
-              state.getContact.imgPath);
-        }
-        return Center(
-        );
-      }),
+      child: Scaffold(
+        body: BlocBuilder<ContactBloc, ContactState>(builder: (context, state) {
+          if (state is ContactIsLoadedState) {
+            return ContactDetailsView(
+                context,
+                state.getContact.phone,
+                state.getContact.email,
+                state.getContact.name,
+                state.getContact.lastName,
+                state.getContact.imgPath);
+          }
+          return Center(
+          );
+        }),
+      ),
     );
   }
 
@@ -78,238 +80,178 @@ class ContactDetailsState extends State<ContactDetails> {
 
   Widget ContactDetailsView(
       context, phone, String email, String name, String lastname, String img) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        color: Colors.white,
-        child: Stack(
-          alignment: Alignment.center,
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: <Widget>[
+        Column(
           children: <Widget>[
-            // background image and bottom contents
-            Column(
-              children: <Widget>[
-                Stack(
+            Expanded(
+              flex: 1,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 4.1,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(15),
+                      bottomLeft: Radius.circular(15)
+                  ),
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/header.png'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              )
+              ,
+            ),
+            SizedBox(height:  MediaQuery.of(context).size.height/100,),
+            Expanded(
+              flex: 3,
+              child: Container(
+                height: MediaQuery.of(context).size.height/1.8,
+                decoration: BoxDecoration(
+                    color: Colors.grey[400].withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(15)
+                ),
+                child: Column(
                   children: [
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height / 3.9,
-                        ),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height/1.35,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400].withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(20.0)),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height / 8,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 10,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: setFavoriteIcon(),
+                            onPressed: () {
+                              final contactBloc = BlocProvider.of<ContactBloc>(context);
+                              contactBloc.add(AddContactToFavoriteEvent(contact));
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: (){
+                              Navigator.push(
+                                  context,
+                                  new MaterialPageRoute(
+                                      builder: (context) => new EditedtPage(contact: widget.contact)));
+                            },),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 30,
+                        left: MediaQuery.of(context).size.height / 50,
+                        right:  MediaQuery.of(context).size.height / 50,
+                      ),
+                      child: Center(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height /10,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(25)
+                            ),
+                            child: Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
                                   children: [
-                                    IconButton(
-                                      icon: setFavoriteIcon(),
-                                      onPressed: () {
-                                        final contactBloc = BlocProvider.of<ContactBloc>(context);
-                                        contactBloc.add(AddContactToFavoriteEvent(contact));
-                                      },
+                                    Icon(
+                                      Icons.phone_android_outlined,
+                                      color: Colors.grey,
                                     ),
-                                    IconButton(
-                                        icon: Icon(Icons.edit),
-                                    onPressed: (){
-                                      Navigator.push(
-                                          context,
-                                          new MaterialPageRoute(
-                                              builder: (context) => new EditedtPage(contact: widget.contact)));
-                                    },),
+                                    SizedBox(
+                                        width: MediaQuery.of(context).size.height / 20),
+                                    Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Mobile',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                color: Colors.grey)),
+                                        SizedBox(
+                                            height: MediaQuery.of(context).size.height / 200),
+                                        Text(
+                                          '$phone',
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.black),
+                                        )
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height / 30,
-                                  left: MediaQuery.of(context).size.height / 50,
-                                  right:  MediaQuery.of(context).size.height / 50,
-                                ),
-                                child: Center(
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height /10,
-                                      decoration: BoxDecoration(
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    right: MediaQuery.of(context).size.height / 40,),
+                                  child: GestureDetector(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.green,
+                                      child: Icon(
+                                        Icons.phone,
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(25)
                                       ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Icon(
-                                                Icons.phone_android_outlined,
-                                                color: Colors.grey,
-                                              ),
-                                              SizedBox(
-                                                  width: MediaQuery.of(context).size.height / 20),
-                                              Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Text('Mobile',
-                                                      style: TextStyle(
-                                                          fontSize: 12.0,
-                                                          color: Colors.grey)),
-                                                  SizedBox(
-                                                      height: MediaQuery.of(context).size.height / 200),
-                                                  Text(
-                                                    '$phone',
-                                                    style: TextStyle(
-                                                        fontSize: 15,
-                                                        color: Colors.black),
-                                                  )
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              right: MediaQuery.of(context).size.height / 40,),
-                                            child: GestureDetector(
-                                              child: CircleAvatar(
-                                                backgroundColor: Colors.green,
-                                                child: Icon(
-                                                  Icons.phone,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              onTap: () {
-                                                UrlLauncher.launch(
-                                                    "tel:${widget.contact.phone}");
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height / 50,
-                                  left: MediaQuery.of(context).size.height / 50,
-                                  right:  MediaQuery.of(context).size.height / 50,
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height /10,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(25)
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.email,
-                                              color: Colors.grey,
-                                            ),
-                                            SizedBox(width: MediaQuery.of(context).size.height / 20),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Email',style: TextStyle(fontSize: 12.0,color: Colors.grey)),
-                                                SizedBox(height: MediaQuery.of(context).size.height / 200),
-                                                Text('$email',style: TextStyle(fontSize: 15,color: Colors.black),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(right: MediaQuery.of(context).size.height / 40,),
-                                          child: GestureDetector(
-                                            child: CircleAvatar(
-                                              backgroundColor: Colors.red,
-                                              child: Icon(
-                                                Icons.email,
-                                                color: Colors.white,
-                                              )
-                                            ),
-                                            onTap: () async {
-                                              _launchURL('$email', '', '');
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    onTap: () {
+                                      UrlLauncher.launch(
+                                          "tel:${widget.contact.phone}");
+                                    },
                                   ),
                                 ),
+                              ],
+                            ),
+                          )),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 50,
+                        left: MediaQuery.of(context).size.height / 50,
+                        right:  MediaQuery.of(context).size.height / 50,
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height /10,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.email,
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(width: MediaQuery.of(context).size.height / 20),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Email',style: TextStyle(fontSize: 12.0,color: Colors.grey)),
+                                      SizedBox(height: MediaQuery.of(context).size.height / 200),
+                                      Text('$email',style: TextStyle(fontSize: 15,color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                ],
                               ),
                               Padding(
-                                padding: EdgeInsets.only(
-                                  top: MediaQuery.of(context).size.height / 50,
-                                  left: MediaQuery.of(context).size.height / 50,
-                                  right:  MediaQuery.of(context).size.height / 50,
-                                ),
-                                child: Center(
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height /10,
-                                    decoration: BoxDecoration(
+                                padding: EdgeInsets.only(right: MediaQuery.of(context).size.height / 40,),
+                                child: GestureDetector(
+                                  child: CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      child: Icon(
+                                        Icons.email,
                                         color: Colors.white,
-                                        borderRadius: BorderRadius.circular(25)
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.location_on,
-                                              color: Colors.grey,
-                                            ),
-                                            SizedBox(width: MediaQuery.of(context).size.height / 20),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text('Location',
-                                                    style: TextStyle(fontSize: 12.0,color: Colors.grey)),
-                                                SizedBox(height: MediaQuery.of(context).size.height / 200),
-                                                Text('----------->',style: TextStyle(fontSize: 15,color: Colors.black),
-                                                )
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            right: MediaQuery.of(context).size.height / 40,
-                                          ),
-                                          child: GestureDetector(
-                                              child: CircleAvatar(
-                                                backgroundColor: Colors.blue,
-                                                child: Icon(
-                                                  Icons.location_on,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                              onTap: () async {
-                                                final availableMaps = await MapLauncher.installedMaps;
-                                                await availableMaps.first.showMarker(
-                                                  coords: Coords(
-                                                      widget.contact.latitude,
-                                                      widget.contact.longitude),
-                                                  title: "Ocean Beach",
-                                                );
-                                              }),
-                                        ),
-                                      ],
-                                    ),
+                                      )
                                   ),
+                                  onTap: () async {
+                                    _launchURL('$email', '', '');
+                                  },
                                 ),
                               ),
                             ],
@@ -317,54 +259,106 @@ class ContactDetailsState extends State<ContactDetails> {
                         ),
                       ),
                     ),
-                    Center(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 4.1,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20.0),
-                          image: DecorationImage(
-                            image: AssetImage('assets/images/header.png'),
-                            fit: BoxFit.cover,
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height / 50,
+                        left: MediaQuery.of(context).size.height / 50,
+                        right:  MediaQuery.of(context).size.height / 50,
+                      ),
+                      child: Center(
+                        child: Container(
+                          height: MediaQuery.of(context).size.height /10,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25)
+                          ),
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.location_on,
+                                    color: Colors.grey,
+                                  ),
+                                  SizedBox(width: MediaQuery.of(context).size.height / 20),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Location',
+                                          style: TextStyle(fontSize: 12.0,color: Colors.grey)),
+                                      SizedBox(height: MediaQuery.of(context).size.height / 200),
+                                      Text('----------->',style: TextStyle(fontSize: 15,color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  right: MediaQuery.of(context).size.height / 40,
+                                ),
+                                child: GestureDetector(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.blue,
+                                      child: Icon(
+                                        Icons.location_on,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    onTap: () async {
+                                      final availableMaps = await MapLauncher.installedMaps;
+                                      await availableMaps.first.showMarker(
+                                        coords: Coords(
+                                            widget.contact.latitude,
+                                            widget.contact.longitude),
+                                        title: "Ocean Beach",
+                                      );
+                                    }),
+                              ),
+                            ],
                           ),
                         ),
-                      )
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
-            // Profile image
-            Positioned(
-              top: 150.0, // (background container size) - (circle height / 2)
-              child: CircleAvatar(
-                  radius: 55,
-                  backgroundColor: Colors.white,
-                  child: img == null
-                      ? Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/User.png'),
-                            fit: BoxFit.fill)),
-                  )
-                      : Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                            image: Image.file(File(img)).image,
-                            fit: BoxFit.fill)),
-                  )
-                // Image.file(_image),
               ),
             ),
+
           ],
         ),
-      ),
+        // Profile image
+        Container(
+          alignment: Alignment(0.0, -0.6),
+          child: CircleAvatar(
+              radius: 55,
+              backgroundColor: Colors.white,
+              child: img == null
+                  ? Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/User.png'),
+                        fit: BoxFit.fill)),
+              )
+                  : Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    image: DecorationImage(
+                        image: Image.file(File(img)).image,
+                        fit: BoxFit.fill)),
+              )
+            // Image.file(_image),
+          ),
+        )
+      ],
     );
   }
 
