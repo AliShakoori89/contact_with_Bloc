@@ -32,17 +32,17 @@ class _HomePageState extends State<HomePage> {
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                   icon: Icon(Icons.contacts),
-                  title: Text('Contact'),
+                  label: 'Contact',
                   backgroundColor: Colors.grey[300]
                   ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.access_time_rounded),
-                title: Text('Resent'),
+                label: 'Resent',
                   backgroundColor: Colors.grey[300]
                 ),
               BottomNavigationBarItem(
                   icon: Icon(Icons.star),
-                  title: Text('Favorites'),
+                  label: 'Favorites',
                 backgroundColor: Colors.grey[300]
                   ),
             ],
